@@ -19,11 +19,13 @@ import org.jboss.forge.resources.java.JavaResource;
 import org.jboss.forge.scaffold.AccessStrategy;
 import org.jboss.forge.scaffold.ScaffoldProvider;
 import org.jboss.forge.scaffold.TemplateStrategy;
+import org.jboss.forge.scaffold.html5.client.IntrospectorClient;
 import org.jboss.forge.scaffold.html5.json.util.JsonArray;
 import org.jboss.forge.scaffold.html5.json.util.JsonObject;
 import org.jboss.forge.scaffold.html5.metawidget.inspector.ForgeInspector;
 import org.jboss.forge.scaffold.html5.metawidget.inspector.propertystyle.ForgePropertyStyle;
 import org.jboss.forge.scaffold.html5.metawidget.inspector.propertystyle.ForgePropertyStyleConfig;
+import org.jboss.forge.scaffold.html5.resource.ResourceProvider;
 import org.jboss.forge.scaffold.util.ScaffoldUtil;
 import org.jboss.forge.shell.ShellPrompt;
 import org.jboss.forge.shell.plugins.Alias;
@@ -42,7 +44,7 @@ import org.metawidget.inspector.jpa.JpaInspectorConfig;
 import org.metawidget.inspector.propertytype.PropertyTypeInspector;
 import org.metawidget.util.XmlUtils;
 import org.w3c.dom.Element;
-
+import org.jboss.forge.scaffold.html5.resource.AeroGearResourceProvider;
 import javax.inject.Inject;
 import java.io.*;
 import java.util.*;
@@ -64,6 +66,12 @@ public class Html5Scaffold extends BaseFacet implements ScaffoldProvider {
     private boolean hasSecurity;
 
     private boolean hasCordova;
+
+
+    protected IntrospectorClient introspectorClient;
+
+
+    protected AeroGearResourceProvider resourceProvider;
 
     @Inject
     public Html5Scaffold(final ShellPrompt prompt) {
@@ -109,10 +117,7 @@ public class Html5Scaffold extends BaseFacet implements ScaffoldProvider {
         refreshConfig();
 
 
-        // Setup static resources.
 
-        // TODO: Make this dynamic and dependent on the HTML5 framework. Choose AngularJS libraries (or Backbone.js, Aerogear or
-        // any other) based on configuration.
         result.add(ScaffoldUtil.createOrOverwrite(this.prompt, web.getWebResource("/styles/bootstrap.css"), getClass()
                 .getResourceAsStream("/scaffold/angularjs/styles/bootstrap.css"), overwrite));
         result.add(ScaffoldUtil.createOrOverwrite(this.prompt, web.getWebResource("/styles/main.css"), getClass()
@@ -643,13 +648,13 @@ public class Html5Scaffold extends BaseFacet implements ScaffoldProvider {
 
                 jsonGenerator.writeFieldName("cordova");
                 jsonGenerator.writeStartObject();
-                jsonGenerator.writeBooleanField("enable", false);
+                jsonGenerator.writeBooleanField("enable", true);
                 jsonGenerator.writeStringField("baseURL", "http://localhost:8080");
                 jsonGenerator.writeEndObject();
 
                 jsonGenerator.writeFieldName("security");
                 jsonGenerator.writeStartObject();
-                jsonGenerator.writeBooleanField("enable", false);
+                jsonGenerator.writeBooleanField("enable", true);
 
                 jsonGenerator.writeFieldName("users");
                 jsonGenerator.writeStartArray();
