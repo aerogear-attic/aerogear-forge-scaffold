@@ -63,6 +63,8 @@ public class Html5Scaffold extends BaseFacet implements ScaffoldProvider {
 
     private boolean hasSecurity;
 
+    private boolean hasCordova;
+
     @Inject
     public Html5Scaffold(final ShellPrompt prompt) {
 
@@ -75,7 +77,7 @@ public class Html5Scaffold extends BaseFacet implements ScaffoldProvider {
         Dependency agDep = DependencyBuilder.create()
                 .setGroupId("org.jboss.aerogear")
                 .setArtifactId("aerogear-controller")
-                .setVersion("1.0.0");
+                .setVersion("1.0.1");
         Dependency secDep = DependencyBuilder.create()
                 .setGroupId("org.jboss.aerogear")
                 .setArtifactId("aerogear-security")
@@ -157,7 +159,7 @@ public class Html5Scaffold extends BaseFacet implements ScaffoldProvider {
     public List<Resource<?>> generateIndex(String targetDir, Resource<?> template, boolean overwrite) {
         refreshConfig();
         hasSecurity = jsonObject.getObject("security").getBoolean("enable");
-
+        hasCordova = jsonObject.getObject("cordova").getBoolean("enable");
         Configuration config = new Configuration();
         config.setClassForTemplateLoading(getClass(), "/scaffold");
         //config.setObjectWrapper(new DefaultObjectWrapper());
@@ -177,6 +179,10 @@ public class Html5Scaffold extends BaseFacet implements ScaffoldProvider {
         root.put("project", metadata);
         root.put("packageName", packageName.substring(0, packageName.lastIndexOf(".")));
         root.put("hasSecurity", hasSecurity);
+        root.put("hasCordova", hasCordova);
+        if(hasCordova){
+            root.put("baseURL",jsonObject.getObject("cordova").getString("baseURL"));
+        }
         Map securityMap = jsonObject.getObject("security").toMap();
         root.put("securityMap", securityMap);
 
@@ -418,6 +424,20 @@ public class Html5Scaffold extends BaseFacet implements ScaffoldProvider {
             throw new RuntimeException(e);
         }
 
+        try {
+            Template controllerTemplate = config.getTemplate("config/CorsConfigProducer.java.ftl");
+            Writer contents = new StringWriter();
+            controllerTemplate.process(root, contents);
+            contents.flush();
+            JavaClass resource = JavaParser.parse(JavaClass.class, contents.toString());
+            resource.setPackage(javaSourceFacet.getBasePackage() + ".config");
+            javaSourceFacet.saveJavaSource(resource);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (TemplateException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     @Override
@@ -620,6 +640,13 @@ public class Html5Scaffold extends BaseFacet implements ScaffoldProvider {
                 JsonGenerator jsonGenerator = jsonF.createGenerator(new File(this.project.getProjectRoot().getFullyQualifiedName(), "conf.json"), JsonEncoding.UTF8);
                 jsonGenerator.useDefaultPrettyPrinter();
                 jsonGenerator.writeStartObject();
+
+                jsonGenerator.writeFieldName("cordova");
+                jsonGenerator.writeStartObject();
+                jsonGenerator.writeBooleanField("enable", false);
+                jsonGenerator.writeStringField("baseURL", "http://localhost:8080");
+                jsonGenerator.writeEndObject();
+
                 jsonGenerator.writeFieldName("security");
                 jsonGenerator.writeStartObject();
                 jsonGenerator.writeBooleanField("enable", false);

@@ -7,6 +7,9 @@ restAuth : AeroGear.Auth({
 name: "auth",
 settings: {
 agAuth: true,
+ <#if hasCordova>
+ baseURL: "${baseURL}",
+ </#if>
 endpoints: {
 enroll: "register",
 login: "login",
@@ -19,6 +22,9 @@ logout: "logout"
     name: "${entitySecurity.name?lower_case}s",
     settings: {
     authenticator: this.restAuth
+    <#if hasCordova>,
+    baseURL: "${baseURL}"
+    </#if>
     }
     }).pipes.${entitySecurity.name?lower_case}s,
 
