@@ -8,11 +8,13 @@ import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import org.apache.commons.io.FileUtils;
 import org.jboss.forge.parser.JavaParser;
 import org.jboss.forge.parser.java.JavaClass;
 import org.jboss.forge.project.dependencies.Dependency;
 import org.jboss.forge.project.dependencies.DependencyBuilder;
 import org.jboss.forge.project.facets.*;
+import org.jboss.forge.resources.DirectoryResource;
 import org.jboss.forge.resources.FileResource;
 import org.jboss.forge.resources.Resource;
 import org.jboss.forge.resources.java.JavaResource;
@@ -260,6 +262,17 @@ public class Html5Scaffold extends BaseFacet implements ScaffoldProvider {
             throw new RuntimeException(e);
         }
 
+        //if we have defined a appPath for cordova let's copy all the webnapp content
+        if(jsonObject.getObject("cordova").getString("appPath")!= null){
+
+
+        DirectoryResource webapp =  web.getWebRootDirectory();
+        try {
+            FileUtils.copyDirectory(FileUtils.getFile(webapp.getFullyQualifiedName()), FileUtils.getFile(jsonObject.getObject("cordova").getString("appPath")+"/www"));
+        } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        }
 
         return result;
     }
@@ -650,6 +663,7 @@ public class Html5Scaffold extends BaseFacet implements ScaffoldProvider {
                 jsonGenerator.writeStartObject();
                 jsonGenerator.writeBooleanField("enable", true);
                 jsonGenerator.writeStringField("baseURL", "http://localhost:8080");
+                jsonGenerator.writeStringField("appPath", "");
                 jsonGenerator.writeEndObject();
 
                 jsonGenerator.writeFieldName("security");
