@@ -1,31 +1,16 @@
 /*
- * JBoss, Home of Professional Open Source
- * Copyright 2011, Red Hat, Inc., and individual contributors
- * by the @authors tag. See the copyright.txt in the distribution for a
- * full listing of individual contributors.
+ * Copyright 2012 Red Hat, Inc. and/or its affiliates.
  *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 2.1 of
- * the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * Licensed under the Eclipse Public License version 1.0, available at
+ * http://www.eclipse.org/legal/epl-v10.html
  */
 package org.jboss.forge.scaffold.html5.metawidget.inspector.propertystyle;
+
+import java.text.MessageFormat;
 
 import org.jboss.forge.project.Project;
 import org.metawidget.inspector.impl.propertystyle.javabean.JavaBeanPropertyStyleConfig;
 import org.metawidget.util.simple.ObjectUtils;
-
-import java.text.MessageFormat;
 
 /**
  * Configures a <tt>ForgePropertyStyle</tt>.
@@ -34,7 +19,8 @@ import java.text.MessageFormat;
  */
 
 public class ForgePropertyStyleConfig
-        extends JavaBeanPropertyStyleConfig {
+        extends JavaBeanPropertyStyleConfig
+{
 
     //
     // Private members
@@ -46,11 +32,9 @@ public class ForgePropertyStyleConfig
     // Public methods
     //
 
-    public ForgePropertyStyleConfig setProject(Project project) {
+    public ForgePropertyStyleConfig setProject(Project project)
+    {
         this.project = project;
-
-        // Fluent interface
-
         return this;
     }
 
@@ -61,23 +45,28 @@ public class ForgePropertyStyleConfig
      */
 
     @Override
-    public ForgePropertyStyleConfig setPrivateFieldConvention(MessageFormat privateFieldConvention) {
+    public ForgePropertyStyleConfig setPrivateFieldConvention(MessageFormat privateFieldConvention)
+    {
         super.setPrivateFieldConvention(privateFieldConvention);
 
         return this;
     }
 
     @Override
-    public boolean equals(Object that) {
-        if (this == that) {
+    public boolean equals(Object that)
+    {
+        if (this == that)
+        {
             return true;
         }
 
-        if (!ObjectUtils.nullSafeClassEquals(this, that)) {
+        if (!ObjectUtils.nullSafeClassEquals(this, that))
+        {
             return false;
         }
 
-        if (this.project != ((ForgePropertyStyleConfig) that).project) {
+        if (this.project != ((ForgePropertyStyleConfig) that).project)
+        {
             return false;
         }
 
@@ -85,7 +74,8 @@ public class ForgePropertyStyleConfig
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
 
         int hashCode = super.hashCode();
         hashCode = 31 * hashCode + ObjectUtils.nullSafeHashCode(this.project);
@@ -97,7 +87,8 @@ public class ForgePropertyStyleConfig
     // Protected methods
     //
 
-    protected Project getProject() {
+    protected Project getProject()
+    {
         return this.project;
     }
 
@@ -106,7 +97,8 @@ public class ForgePropertyStyleConfig
      */
 
     @Override
-    protected MessageFormat getPrivateFieldConvention() {
+    protected MessageFormat getPrivateFieldConvention()
+    {
         return super.getPrivateFieldConvention();
     }
 }
