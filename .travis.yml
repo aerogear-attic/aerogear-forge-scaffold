@@ -1,0 +1,12 @@
+language: java
+jdk:
+  - openjdk7
+  - oraclejdk7
+before_install:
+  - echo "before install phase"
+install:
+  - echo "install phase"
+before_script:
+  - echo "before script phase"
+script:
+  - mvn package
